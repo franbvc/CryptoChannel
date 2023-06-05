@@ -9,7 +9,7 @@ The tool was developed in response to the global wave of governments proposing b
 
 ### 1.2 Compatibility
 
-The CLI tool is currently tested and compatible with Linux systems. Support for other operating systems may be considered in future updates.
+The CLI tool is currently tested and compatible with Linux and Windows systems (Powershell). Support for other operating systems may be considered in future updates.
 
 ### 1.3 Technologies Used
 
