@@ -66,6 +66,10 @@ impl KeyStorage {
         Ok(())
     }
 
+    pub fn name_exists(self, exchange_name: String) -> bool {
+        self.exchange_map.contains_key(&exchange_name)
+    }
+
     pub fn get_map(self) -> HashMap<String, (KeyExchange, KeySignature)> {
         self.exchange_map
     }
@@ -98,6 +102,14 @@ impl KeyExchange {
 
     pub fn get_your_public_key(&self) -> [u8; 32] {
         self.your_public_key
+    }
+
+    pub fn get_your_static_secret(&self) -> [u8; 32] {
+        self.your_static_secret
+    }
+
+    pub fn get_encryption_key(&self) -> [u8; 32] {
+        self.encryption_key
     }
 
     pub fn add_your_dh_kp(&mut self, kp: DhKeyPair) {

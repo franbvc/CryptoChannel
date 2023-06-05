@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use x25519_dalek::{PublicKey, SharedSecret, StaticSecret};
 
 use crate::config::{find_config_file, read_config_file, ConfigSettings};
+use crate::key_exchange::key_to_string;
 use crate::key_store_classes::{KeyExchange, KeySignature, KeyStorage};
 
 fn create_storage(storage_path: &PathBuf) {
@@ -35,6 +36,48 @@ pub fn read_storage() -> KeyStorage {
     let contents = fs::read_to_string(storage_path).expect("Storage file read successfully!");
 
     serde_json::from_str(&contents).unwrap()
+}
+
+pub fn get_key_exchange_names() -> Vec<String> {
+    let curr_storage = read_storage();
+    curr_storage
+        .exchange_map
+        .keys()
+        .cloned()
+        .collect::<Vec<String>>()
+}
+
+pub fn get_exchange_dh_public(exchange_name: String) -> String {
+    let curr_storage = read_storage();
+    let public = curr_storage
+        .get_exchange(&exchange_name.to_owned())
+        .unwrap()
+        .get_your_public_key();
+    key_to_string(public)
+}
+
+pub fn get_exchange_dh_secret(exchange_name: String) -> [u8; 32] {
+    let curr_storage = read_storage();
+    curr_storage
+        .get_exchange(&exchange_name.to_owned())
+        .unwrap()
+        .get_your_static_secret()
+}
+
+pub fn get_exchange_encryption_key(exchange_name: String) -> [u8; 32] {
+    let curr_storage = read_storage();
+    curr_storage
+        .get_exchange(&exchange_name.to_owned())
+        .unwrap()
+        .get_encryption_key()
+}
+
+pub fn validate_new_exchange_name(exchange_name: String) -> Result<(), &'static str> {
+    let curr_storage = read_storage();
+    if !curr_storage.name_exists(exchange_name) {
+        return Ok(());
+    }
+    Err("Exchange name already exists in key storage!")
 }
 
 pub fn write_storage(to_write: KeyStorage) -> Result<(), &'static str> {
