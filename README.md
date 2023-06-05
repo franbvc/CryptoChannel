@@ -110,29 +110,27 @@ The CryptoChannel CLI tool provides a menu-based interface to perform various ac
    - Once the Key Exchange is completed, you can proceed to encrypt and decrypt messages using the generated shared key.
    - For the other party to be able to decrypt your messages, they must complete a Key Exchange with you as well, by you sending them your public key and them following the same steps as above.
 
-4. **Encrypting Files**
+4. **Encrypting Message**
 
-   To encrypt files using the CryptoChannel tool, follow these steps:
+   To encrypt messages using the CryptoChannel tool, follow these steps:
    
-   - Select the "Encrypt Files" option from the menu.
-   - Choose the Key Exchange to use for encryption.
+   - Select the "Encrypt Message" option from the menu.
    - Copy the text of the message you want to encrypt to the clipboard. You can do this in multiple ways:
      1. Select the text and use the keyboard shortcut for copying (e.g., Ctrl+C).
      2. Alternatively, right-click on the selected text and choose the "Copy" option from the context menu.
    - Confirm that the text is copied to the clipboard by entering "y" when prompted.
+   - Choose the Key Exchange to use for encryption.
    - The tool will encrypt the message using the encryption key of the chosen Key Exchange and will put the encrypted message in the clipboard.
    - Paste the encrypted message from the clipboard to the desired location.
 
-5. **Decrypting Files**
+5. **Decrypting Message**
 
-   To decrypt files using the CryptoChannel tool, follow these steps:
+   To decrypt messages using the CryptoChannel tool, follow these steps:
    
-   - Select the "Decrypt Files" option from the menu.
-   - Choose the Key Exchange to use for decryption.
-   - Specify the encrypted file(s) you want to decrypt.
+   - Select the "Decrypt Message" option from the menu.
    - Copy the encrypted message to the clipboard.
    - Confirm that the encrypted message is copied to the clipboard by entering "y" when prompted.
+   - Choose the Key Exchange to use for decryption.
    - The tool will decrypt the message using the encryption key of the chosen Key Exchange and will print the decrypted message to the terminal.
 
 Make sure to familiarize yourself with the concepts and functionalities of the CryptoChannel tool to effectively utilize
-
