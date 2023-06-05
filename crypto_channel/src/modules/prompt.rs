@@ -1,3 +1,5 @@
+use std::borrow::Borrow;
+
 use crate::encryption::{decrypt_message, encrypt_message, encrypted_to_str, str_to_encrypted};
 use crate::key_exchange::{gen_encryption_key, gen_shared_secret, gen_static_kp, string_to_key};
 use crate::key_store::{
@@ -7,6 +9,7 @@ use crate::key_store::{
 use crate::key_store_classes::{KeyExchange, KeySignature};
 
 use arboard::Clipboard;
+use colored::Colorize;
 use inquire::{Confirm, Select, Text};
 
 pub fn prompt_exchange_name() -> Result<String, &'static str> {
@@ -109,8 +112,12 @@ pub fn show_public_key() {
         Ok(exchange_name) => {
             let public_str = get_exchange_dh_public(exchange_name.clone());
             println!(
-                "Your Public Key for the exchange `{}` is: {}",
-                exchange_name, public_str
+                "{}{}{}{}{}",
+                "Your Public Key for the exchange `".green(),
+                exchange_name.green().bold(),
+                "` is: `".green(),
+                public_str.green().bold(),
+                "`".green()
             );
         }
         Err(_) => println!("Failed to get exchange, it might have been deleted"),
@@ -158,6 +165,7 @@ pub fn create_new_key_exchange() {
     match write_result {
         Ok(_) => {
             println!(
+                "{}",
                 "Your key pair has been generated and stored \
                  securely!. You can now proceed to complete the \
                  Key Exchange by providing the Public Key of \
@@ -165,6 +173,7 @@ pub fn create_new_key_exchange() {
                  completed the Key Exchange, a shared secret \
                  key will be generated for secure communication. \
                  Thank you for using our application."
+                    .green()
             );
         }
         Err(e) => println!("{}", e),
@@ -206,11 +215,14 @@ pub fn complete_key_exchange() {
 
     match write_storage(curr_storage) {
         Ok(_) => println!(
-            "The Key Exchange `{}` has been completed \
+            "{}{}{}",
+            "The Key Exchange `".green(),
+            exchange_name.green().bold(),
+            "` has been completed \
              and stored securely! You can now proceed to \
              encrypt and decrypt messages using this \
-             exchange.",
-            exchange_name
+             exchange."
+                .green(),
         ),
         Err(e) => println!("{}", e),
     }
@@ -270,7 +282,12 @@ pub fn encrypt_prompt() {
     match clipboard.get_text() {
         Ok(txt) => {
             text = txt;
-            println!("Clipboard text was: {}", text);
+            println!(
+                "{}{}{}",
+                "Clipboard text was: `".green(),
+                text.green().bold(),
+                "`".green()
+            );
         }
         Err(e) => {
             println!("{}", e);
@@ -283,13 +300,17 @@ pub fn encrypt_prompt() {
 
     match clipboard.set_text(encoded_msg.clone()) {
         Ok(_) => println!(
+            "{}{}{}{}",
             "The clipboard contents were encrypted successfully. \
-             They should now be : \n{}. \n \n \
-             The encrypted text is now available on the clipboard, \
+             They should now be: `"
+                .green(),
+            encoded_msg.green().bold(),
+            "`\n".green(),
+            "The encrypted text is now available on the clipboard, \
              allowing you to securely share it with others by simply \
              pasting it. You can proceed to use the encrypted text \
-             as needed, such as sending it via messaging apps or email.",
-            encoded_msg
+             as needed, such as sending it via messaging apps or email."
+                .green()
         ),
         Err(e) => println!("{}", e),
     }
@@ -350,7 +371,12 @@ pub fn decrypt_prompt() {
     match clipboard.get_text() {
         Ok(txt) => {
             text = txt;
-            println!("Clipboard text was: {}", text);
+            println!(
+                "{}{}{}",
+                "Clipboard text was: `".green(),
+                text.green().bold(),
+                "`".green()
+            );
         }
         Err(e) => {
             println!("{}", e);
@@ -363,7 +389,12 @@ pub fn decrypt_prompt() {
 
     match std::str::from_utf8(&decrypted_msg) {
         Ok(msg) => {
-            println!("The encrypted message was: \n {}", msg);
+            //println!("The encrypted message was: \n {}", msg);
+            println!(
+                "{}{}",
+                "The encrypted message was: ".green(),
+                msg.green().bold()
+            );
         }
         Err(e) => println!(
             "Error converting the decrypted msg to UTF-8. \
@@ -411,7 +442,12 @@ pub fn delete_key_exchange() {
     let mut curr_storage = read_storage();
     curr_storage.exchange_map.remove(&exchange_name);
     match write_storage(curr_storage) {
-        Ok(_) => println!("Key Exchange `{}` was deleted successfully!", exchange_name),
+        Ok(_) => println!(
+            "{}{}{}",
+            "Key Exchange `".green(),
+            exchange_name.red().bold(),
+            "` was deleted successfully!".green()
+        ),
         Err(e) => println!("Error: {}", e),
     }
 }
